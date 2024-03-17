@@ -9,35 +9,35 @@ pipeline {
                 sh 'mvn package -DskipTests -B -ntp'
             }
         }
-        // stage('Testing') {
-        //     steps {
-        //         sh 'mvn test -B -ntp'
-        //     }
-        //     post {                
-        //         success {
-        //             jacoco()
-        //             junit 'target/surefire-reports/*.xml'
-        //         }                
-        //         failure {
-        //             echo 'Ha ocurrido un error TEST'
-        //         }
-        //     }
-        // }
-        // stage('Sonarqube') {
-        //     steps {
-        //         withSonarQubeEnv('sonarqube'){                    
-        //             sh 'mvn sonar:sonar -B -ntp'
-        //         }              
-        //     }
-        // }
-        // stage('Quality Gate') {
-        //     steps {    
-        //         timeout(time: 1, unit: 'HOURS'){
-        //             waitForQualityGate abortPipeline: true
-        //         }          
-        //     }
-        // }
-        stage("Deploy DockerHub"){
+        stage('Testing') {
+            steps {
+                sh 'mvn test -B -ntp'
+            }
+            post {                
+                success {
+                    jacoco()
+                    junit 'target/surefire-reports/*.xml'
+                }                
+                failure {
+                    echo 'Ha ocurrido un error TEST'
+                }
+            }
+        }
+        stage('Sonarqube') {
+            steps {
+                withSonarQubeEnv('sonarqube'){                    
+                    sh 'mvn sonar:sonar -B -ntp'
+                }              
+            }
+        }
+        stage('Quality Gate') {
+            steps {    
+                timeout(time: 1, unit: 'HOURS'){
+                    waitForQualityGate abortPipeline: true
+                }          
+            }
+        }
+        stage("DockerHub"){
             steps{
                 script {
                     
@@ -48,26 +48,19 @@ pipeline {
                         app.push()
                         app.push('latest')
                     }                                        
-                }       
-
+                }            
+            }
+        }
+        stage("Deploy"){
+            steps{
                 script {       
 
                     def pom = readMavenPom file: 'pom.xml'
                     sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
 
-                }        
+                }
             }
         }
-        // stage("Deploy"){
-        //     steps{
-        //         script {       
-
-        //             def pom = readMavenPom file: 'pom.xml'
-        //             sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
-
-        //         }
-        //     }
-        // }
     }
     post {
         success {
