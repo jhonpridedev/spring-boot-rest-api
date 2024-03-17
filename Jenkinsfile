@@ -49,8 +49,11 @@ pipeline {
                         app.push('latest')
                     }                    
 
-                }
-
+                }                
+            }
+        }
+        stage("Deploy"){
+            steps{
                 sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
             }
         }
