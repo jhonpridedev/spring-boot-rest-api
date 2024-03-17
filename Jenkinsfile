@@ -56,6 +56,7 @@ pipeline {
                 script {       
 
                     def pom = readMavenPom file: 'pom.xml'
+                    sh "docker rm -f ${pom.artifactId}";
                     sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
 
                 }
