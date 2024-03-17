@@ -23,12 +23,13 @@ pipeline {
                 }
             }
         }
-        stage('Sonarqube + Quality Gate') {
+        stage('Sonarqube') {
             steps {
                 withSonarQubeEnv('sonarqube'){                    
                     sh 'mvn sonar:sonar -B -ntp'
                 }         
 
+                // Quality Gate
                 timeout(time: 1, unit: 'HOURS'){
                     waitForQualityGate abortPipeline: true
                 }       
