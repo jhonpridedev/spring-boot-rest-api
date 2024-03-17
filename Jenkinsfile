@@ -47,10 +47,15 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub-credentials') {
                         app.push()
                         app.push('latest')
-                    }                    
+                    }                                        
+                }       
 
+                script {       
+
+                    def pom = readMavenPom file: 'pom.xml'
                     sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
-                }                
+
+                }        
             }
         }
         // stage("Deploy"){
