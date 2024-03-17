@@ -49,19 +49,20 @@ pipeline {
                         app.push('latest')
                     }                    
 
+                    sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
                 }                
             }
         }
-        stage("Deploy"){
-            steps{
-                script {       
+        // stage("Deploy"){
+        //     steps{
+        //         script {       
 
-                    def pom = readMavenPom file: 'pom.xml'
-                    sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
+        //             def pom = readMavenPom file: 'pom.xml'
+        //             sh "docker run -d --name ${pom.artifactId} -p 9966:9966 jhonpridedev/${pom.artifactId}:${pom.version}"
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     }
     post {
         success {
