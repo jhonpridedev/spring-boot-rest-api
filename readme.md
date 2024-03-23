@@ -13,6 +13,7 @@ El pipeline se encuentra en el job __spring-boot-rest-api__
 - __DockerHub__
     - Las imágenes del proyecto están almacenadas en un repositorio público, accesible a través de https://hub.docker.com/r/jhonpridedev/spring-boot-rest-api/tags
     ![dockerhub](./screenshots/dockerhub.png)
+    
 - __Deploy__
     - El microservicio se despliega en la siguiente URL: http://54.191.82.56:9966/petclinic/swagger-ui/index.html
 
